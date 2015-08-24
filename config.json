@@ -9,8 +9,11 @@
         "foo":"bar"
     },
     "qb":{
-        "fromTables": {
-
-
+        "fromTable": {
+            "entities":"geoinfra.entities"
+        },
+        "whereClause":{
+            "tsquery": "hello"
+        }
     }
 }
