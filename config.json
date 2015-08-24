@@ -1,0 +1,19 @@
+{
+    "db":{
+        "d": "dev",
+        "h": "192.168.101.12",
+        "p": "gwwvgeo",
+        "u": "geo"
+    },
+    "hg":{
+        "foo":"bar"
+    },
+    "qb":{
+        "fromTable": {
+            "entities":"geoinfra.entities"
+        },
+        "whereClause":{
+            "tsquery": "hello"
+        }
+    }
+}

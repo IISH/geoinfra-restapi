@@ -1,0 +1,35 @@
+Modules and their division and purpose
+
+index.js
+--------
+runs the express app.
+
+
+pgapi-bridge
+------------
+sends requests to postgres and gets them back.
+
+
+
+Data flow
+=========
+Let's examin the flow of data to see what interfaces we need to provide.
+
+*http input*: a GET request comes in with a url and parameters. Something like: `http://api.example.org/search?name=austria&after=1800&before=1900`
+
+We need to *parse* this to find out the route and the search arguments. Do this in the _params_ module. Then we get:
+
+    path: search
+    args:
+        name: austria
+        after: 1800
+        before: 1900
+    modifiers:  #could be things like geom=true or exact_match=false.
+        none
+
+Express takes care of routing. But we need to check the parameters in the future, validate them.
+
+
+We need to select which backend we're going to use.
+
+Then for Postgres, we need to translate our requests to SQL. This is domain-specific.
