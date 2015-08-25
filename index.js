@@ -5,6 +5,7 @@ nconf.file({file: './config.json'});
 var hg = require('./lib/hgapi-bridge')(nconf.get('hg'));
 var pg = require('./lib/pgapi-bridge')(nconf.get('db'));
 var queryParser = require('./lib/query-parser');
+var bulkfetch = require('./lib/topojson.js');
 //var auth = require('wmapi-auth');
 
 var fooYa = function(req, res, next) {
@@ -42,7 +43,28 @@ function findCountries(req, res) {
 
 
 };
-function getCountries(req, res) {res.send('hello')};
+//handler for /countries path. Sends topojson or geojson.
+var getCountries = function(req, res) {
+    console.log(req.params);
+    var query = bulkfetch.buildQuery(req);
+    pg.fetch(query)
+    .then(function(data){
+        res.setHeader('Content-Type', 'application/json');
+        //build a GeoJSON feature and return it
+        data[0].row_to_json.totalFeatures = data[0].row_to_json.features.length;
+        if (req.query.format && req.query.format == 'topojson') {
+            res.send(bulkfetch.makeTopo(data[0].row_to_json));
+        } else {
+            res.send(data[0].row_to_json);
+        }
+    })
+    .then(null,function(error){
+        console.log(error);
+        return res.status(500).send('Internal server error. check your server logs for more details. This API is still under development, so it may just be a mismatch from your query parameters to the database records. Try a different time range and/or (set of) countries.');
+    process.exit(1);
+    });
+}
+
 function testRes(req, res) {
     console.log(req.query);
     res.send(req.processedQuery)

@@ -17,7 +17,8 @@
     "request": "~2.60.0",
     "squel": "~4.0.0",
     "pg-promise": "~1.8.5",
-    "nconf": "~0.7.2"
+    "nconf": "~0.7.2",
+    "topojson": "~1.6.19"
   },
   "devDependencies": {
     "tape": "~4.1.0",
