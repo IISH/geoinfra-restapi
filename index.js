@@ -43,6 +43,18 @@ function findCountries(req, res) {
 
 
 };
+
+function getIds(req, res) {
+    pg.fetch('select case when source_id = 1 then \'cshapes/\'||id else \'geacron/\'||id end as id, name from geoinfra.entities')
+    .then(function(data){
+        res.send(data)
+    })
+    .catch(function(error){
+        console.log('final error somewhere');
+        console.log(error)
+    });
+}
+
 //handler for /countries path. Sends topojson or geojson.
 var getCountries = function(req, res) {
     console.log(req.params);
@@ -69,6 +81,20 @@ function testRes(req, res) {
     console.log(req.query);
     res.send(req.processedQuery)
 }
+function testHg(req, res) {
+    //for now very basic: just request concepts by name
+    var query = {};
+    query.name = req.query.name
+    var options = {};
+    options.method = 'GET';
+    options.path = '/search?name='+req.query.name+'&geometry=false';
+    hg.fetch(options)
+    .then(function(response) {
+        console.log(response);
+        res.send(response)
+    });
+
+}
 
 
 api.get('/testres', testRes);
@@ -80,7 +106,9 @@ api.get('/', function(req, res) {
   });
 });
 api.get('/find', findCountries);
+api.get('/ids', getIds);
 api.get('/fetch', getCountries);
+api.get('/testhg',testHg);
 api.listen(8090, function() {
   console.log('Topojson API listening on port 8090');
 });
