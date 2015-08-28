@@ -6,6 +6,7 @@ var hg = require('./lib/hgapi-bridge')(nconf.get('hg'));
 var pg = require('./lib/pgapi-bridge')(nconf.get('db'));
 var queryParser = require('./lib/query-parser');
 var bulkfetch = require('./lib/topojson.js');
+var testhg = require('./lib/find-from-hg.js');
 //var auth = require('wmapi-auth');
 
 var fooYa = function(req, res, next) {
@@ -109,6 +110,7 @@ api.get('/find', findCountries);
 api.get('/ids', getIds);
 api.get('/fetch', getCountries);
 api.get('/testhg',testHg);
+api.get('/testhg2', testhg);
 api.listen(8090, function() {
   console.log('Topojson API listening on port 8090');
 });

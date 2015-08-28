@@ -18,7 +18,8 @@
     "squel": "~4.0.0",
     "pg-promise": "~1.8.5",
     "nconf": "~0.7.2",
-    "topojson": "~1.6.19"
+    "topojson": "~1.6.19",
+    "highland": "~2.5.1"
   },
   "devDependencies": {
     "tape": "~4.1.0",
