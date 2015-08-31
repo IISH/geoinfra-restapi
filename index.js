@@ -3,10 +3,11 @@ var fs = require('fs');
 var nconf = require('nconf');
 nconf.file({file: './config.json'});
 var hg = require('./lib/hgapi-bridge')(nconf.get('hg'));
-var pg = require('./lib/pgapi-bridge')(nconf.get('db'));
+var pg = require('./lib/pgapi-bridge')(nconf.get('pg'));
 var queryParser = require('./lib/query-parser');
 var bulkfetch = require('./lib/topojson.js');
 var testhg = require('./lib/find-from-hg.js');
+var oecdSupras = require('./lib/load-oecd-supras.js')();
 //var auth = require('wmapi-auth');
 
 var fooYa = function(req, res, next) {
@@ -24,14 +25,8 @@ api.use(queryParser);
 var transformPost = function(req, res, next) {
     console.log(req);
     next();
-
-
 }
 
-/**
-/ @api {get} /countries fetch countries based on name or id, with time filtering
-/ @apiParam {string} name name of country to search for
-*/
 function findCountries(req, res) {
     pg.fetch(req.processedQuery)
     .then(function(data){
@@ -55,6 +50,7 @@ function getIds(req, res) {
         console.log(error)
     });
 }
+
 
 //handler for /countries path. Sends topojson or geojson.
 var getCountries = function(req, res) {
@@ -97,6 +93,34 @@ function testHg(req, res) {
 
 }
 
+//generic one-level array lookup
+var lookUp = function(el, ar) {
+    for (var i=0;i<ar.length;i++) {
+        if (ar[i].id == el) {
+            return ar[i].name;
+        }
+    }
+}
+
+//look things up in a specific array
+function attachOecdSupras(req, res) {
+    //attach the OECD supra regions. oecdSupras is a pg fetch promise.
+    oecdSupras.then(function(data){
+        req.response.forEach(function(item){
+            if (item.liesIn) {
+                var liesIn = lookUp(item.liesIn, data);
+                if (liesIn) {
+                    item.liesIn = liesIn
+                }
+            }
+        });
+        res.send(req.response);
+    },function(error){
+        console.log('rejected with the error: '+error)
+        res.send(error);
+    });
+
+}
 
 api.get('/testres', testRes);
 api.get('/', function(req, res) {
@@ -106,11 +130,41 @@ api.get('/', function(req, res) {
     message: 'Returning geojson and topojson'
   });
 });
+
+/**
+* @api {get} /find search for countries by name
+* @apiVersion 0.1.0
+* @apiName find
+* @apiGroup geocoder
+*
+* @apiDescription search for countries by name. Some more detailed description.
+*
+* @apiParam {String}    name    a name on which to search. Partial matching is supported.
+* @apiParam {String}    before  latest date the result may be valid: '2015-01-01'
+* @apiParam {String}    after   earliest date the result may be valid: '1870-12-31'
+*
+* @apiSuccess   {Object[]}  countries   list of results (Array of Objects)
+*/
 api.get('/find', findCountries);
 api.get('/ids', getIds);
+
+/**
+* @api {get} /fetch fetch countries by id
+* @apiVersion 0.1.0
+* @apiName fetch
+* @apiGroup geocoder
+*
+* @apiDescription when you know ids, you can request the full country records with geometry by id.
+*
+* @apiParam {String}    id      the id of the feature to request
+* @apiParam {String}    before  latest date the result may be valid: '2015-01-01'
+* @apiParam {String}    after   earliest date the result may be valid: '1870-12-31'
+*
+* @apiSuccess   {Object[]}  countries   list of results (Array of Objects)
+*/
 api.get('/fetch', getCountries);
 api.get('/testhg',testHg);
-api.get('/testhg2', testhg);
+api.get('/testhg2', testhg, attachOecdSupras);
 api.listen(8090, function() {
   console.log('Topojson API listening on port 8090');
 });
