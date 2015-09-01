@@ -6,7 +6,7 @@ var hg = require('./lib/hgapi-bridge')(nconf.get('hg'));
 var pg = require('./lib/pgapi-bridge')(nconf.get('pg'));
 var queryParser = require('./lib/query-parser');
 var bulkfetch = require('./lib/topojson.js');
-var testhg = require('./lib/find-from-hg.js');
+var findFromHg = require('./lib/find-from-hg.js');
 var oecdSupras = require('./lib/load-oecd-supras.js')();
 //var auth = require('wmapi-auth');
 
@@ -145,7 +145,8 @@ api.get('/', function(req, res) {
 *
 * @apiSuccess   {Object[]}  countries   list of results (Array of Objects)
 */
-api.get('/find', findCountries);
+api.get('/find', findFromHg, attachOecdSupras);
+//api.get('/find', findCountries);
 api.get('/ids', getIds);
 
 /**
@@ -164,7 +165,7 @@ api.get('/ids', getIds);
 */
 api.get('/fetch', getCountries);
 api.get('/testhg',testHg);
-api.get('/testhg2', testhg, attachOecdSupras);
+api.get('/testhg2', findFromHg, attachOecdSupras);
 api.listen(8090, function() {
   console.log('Topojson API listening on port 8090');
 });
