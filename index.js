@@ -52,9 +52,10 @@ function getIds(req, res) {
 }
 
 
-//handler for /countries path. Sends topojson or geojson.
+//handler for /fetch path. Sends topojson or geojson.
 var getCountries = function(req, res) {
     console.log(req.params);
+    //TODO: replace this with query-builder.buildQuery.
     var query = bulkfetch.buildQuery(req);
     pg.fetch(query)
     .then(function(data){
@@ -139,13 +140,34 @@ api.get('/', function(req, res) {
 *
 * @apiDescription search for countries by name. Some more detailed description.
 *
-* @apiParam {String}    name    a name on which to search. Partial matching is supported.
-* @apiParam {String}    before  latest date the result may be valid: '2015-01-01'
-* @apiParam {String}    after   earliest date the result may be valid: '1870-12-31'
+* @apiParam {String}    name      a name on which to search. Partial matching is supported. (one of name or id)
+* @apiParam {String}    id        id of country to search for. Composed of dataset + / + id: 'oecd/WEUR' (one of name or id)
+* @apiParam {String}    [before]  latest date the result may be valid: '2015-01-01'
+* @apiParam {String}    [after]   earliest date the result may be valid: '1870-12-31'
 *
 * @apiSuccess   {Object[]}  countries   list of results (Array of Objects)
 */
 api.get('/find', findFromHg, attachOecdSupras);
+
+/**
+* @api {get} /find/byparent search for countries by a parent
+* @apiVersion 0.1.0
+* @apiName find
+* @apiGroup geocoder
+*
+* @apiDescription search for countries by parent name
+*
+* @apiParam {String}    name      a name on which to search. Partial matching is supported. (one of name or id)
+* @apiParam {String}    id        id of parent to search for. Composed of dataset + / + id: 'oecd/WEUR' (one of name or id)
+* @apiParam {String}    [before]  latest date the result may be valid: '2015-01-01'
+* @apiParam {String}    [after]   earliest date the result may be valid: '1870-12-31'
+*
+* @apiSuccess   {Object[]}  countries   list of results (Array of Objects)
+*/
+api.get('/find/byparent', function(req, res, next) {
+    req.query.children = true;
+    next();
+    }, findFromHg, attachOecdSupras);
 //api.get('/find', findCountries);
 api.get('/ids', getIds);
 
@@ -155,13 +177,22 @@ api.get('/ids', getIds);
 * @apiName fetch
 * @apiGroup geocoder
 *
-* @apiDescription when you know ids, you can request the full country records with geometry by id.
+* @apiDescription when you know ids, you can request the full country records with geometry by id, name, or supra/parent. Note for all three of these identifiers you can specify a comma-separated list of multiple identifiers.
 *
-* @apiParam {String}    id      the id of the feature to request
+* @apiParam {String}    name    the name of the feature to request (one of name, id, supra)
+* @apiParam {String}    id      the id of the feature to request (one of name, id, supra)
+* @apiParam {String}    supra   the id of the parent whose children you want to request (one of name, id, supra)
 * @apiParam {String}    before  latest date the result may be valid: '2015-01-01'
 * @apiParam {String}    after   earliest date the result may be valid: '1870-12-31'
 *
 * @apiSuccess   {Object[]}  countries   list of results (Array of Objects)
+*
+* @apiParamExample {json} Request-Example:
+*   {
+        "name":"Netherlands,Luxembourg,Belgium",
+        "id":1220,1221,
+        "supra":"WOFF,WEUR,EASI"
+*   }
 */
 api.get('/fetch', getCountries);
 api.get('/testhg',testHg);
