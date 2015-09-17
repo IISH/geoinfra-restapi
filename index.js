@@ -138,10 +138,10 @@ api.get('/', function(req, res) {
 * @apiName find
 * @apiGroup geocoder
 *
-* @apiDescription search for countries by name. Some more detailed description.
+* @apiDescription search for countries by name. Name and id are mutually exclusive.
 *
-* @apiParam {String}    name      a name on which to search. Partial matching is supported. (one of name or id)
-* @apiParam {String}    id        id of country to search for. Composed of dataset + / + id: 'oecd/WEUR' (one of name or id)
+* @apiParam {String}    name      a name on which to search.
+* @apiParam {String}    id        id of country to search for. Composed of dataset + / + id: 'oecd/WEUR'
 * @apiParam {String}    [before]  latest date the result may be valid: '2015-01-01'
 * @apiParam {String}    [after]   earliest date the result may be valid: '1870-12-31'
 *
@@ -155,10 +155,10 @@ api.get('/find', findFromHg, attachOecdSupras);
 * @apiName find
 * @apiGroup geocoder
 *
-* @apiDescription search for countries by parent name
+* @apiDescription search for countries by parent name or id
 *
 * @apiParam {String}    name      a name on which to search. Partial matching is supported. (one of name or id)
-* @apiParam {String}    id        id of parent to search for. Composed of dataset + / + id: 'oecd/WEUR' (one of name or id)
+* @apiParam {String}    id        id of parent to search for. Composed of dataset + / + id e.g.: 'oecd/WEUR' (one of name or id)
 * @apiParam {String}    [before]  latest date the result may be valid: '2015-01-01'
 * @apiParam {String}    [after]   earliest date the result may be valid: '1870-12-31'
 *
@@ -175,24 +175,18 @@ api.get('/ids', getIds);
 * @api {get} /fetch fetch countries by id
 * @apiVersion 0.1.0
 * @apiName fetch
-* @apiGroup geocoder
+* @apiGroup bulk
 *
-* @apiDescription when you know ids, you can request the full country records with geometry by id, name, or supra/parent. Note for all three of these identifiers you can specify a comma-separated list of multiple identifiers.
+* @apiDescription when you know ids, you can request the full country records with geometry by id, name, or supra/parent. These three parameters are mutually exclusive. Note for all three of these parameters you can specify a comma-separated list of multiple identifiers.
 *
-* @apiParam {String}    name    the name of the feature to request (one of name, id, supra)
-* @apiParam {String}    id      the id of the feature to request (one of name, id, supra)
-* @apiParam {String}    supra   the id of the parent whose children you want to request (one of name, id, supra)
+* @apiParam {String}    name    the name(s) of the feature(s) to request (one of name, id, supra)
+* @apiParam {String}    id      the id(s) of the feature(s) to request (one of name, id, supra)
+* @apiParam {String}    supra   the id(s) of the parent(s) whose children you want to request (one of name, id, supra)
 * @apiParam {String}    before  latest date the result may be valid: '2015-01-01'
 * @apiParam {String}    after   earliest date the result may be valid: '1870-12-31'
 *
 * @apiSuccess   {Object[]}  countries   list of results (Array of Objects)
 *
-* @apiParamExample {json} Request-Example:
-*   {
-        "name":"Netherlands,Luxembourg,Belgium",
-        "id":1220,1221,
-        "supra":"WOFF,WEUR,EASI"
-*   }
 */
 api.get('/fetch', getCountries);
 api.get('/testhg',testHg);
