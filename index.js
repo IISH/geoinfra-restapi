@@ -133,15 +133,16 @@ api.get('/', function(req, res) {
 });
 
 /**
-* @api {get} /find search for countries by name
+* @api {get} /find search for countries by name, id or parent
 * @apiVersion 0.1.0
 * @apiName find
 * @apiGroup geocoder
 *
-* @apiDescription search for countries by name. Name and id are mutually exclusive.
+* @apiDescription search for countries by name, id or parent. Name, id and parent are mutually exclusive.
 *
 * @apiParam {String}    name      a name on which to search.
-* @apiParam {String}    id        id of country to search for. Composed of dataset + / + id: 'oecd/WEUR'
+* @apiParam {String}    supra     a supra region (parent) ID by which to search (returns children of this region). E.g. 'oecd/WEUR'
+* @apiParam {String}    id        id of country to search for. Composed of dataset + / + id: 'cshapes/1220'
 * @apiParam {String}    [before]  latest date the result may be valid: '2015-01-01'
 * @apiParam {String}    [after]   earliest date the result may be valid: '1870-12-31'
 *
@@ -149,25 +150,25 @@ api.get('/', function(req, res) {
 */
 api.get('/find', findFromHg, attachOecdSupras);
 
-/**
-* @api {get} /find/byparent search for countries by a parent
-* @apiVersion 0.1.0
-* @apiName find
-* @apiGroup geocoder
-*
-* @apiDescription search for countries by parent name or id
-*
-* @apiParam {String}    name      a name on which to search. Partial matching is supported. (one of name or id)
-* @apiParam {String}    id        id of parent to search for. Composed of dataset + / + id e.g.: 'oecd/WEUR' (one of name or id)
-* @apiParam {String}    [before]  latest date the result may be valid: '2015-01-01'
-* @apiParam {String}    [after]   earliest date the result may be valid: '1870-12-31'
-*
-* @apiSuccess   {Object[]}  countries   list of results (Array of Objects)
-*/
-api.get('/find/byparent', function(req, res, next) {
-    req.query.children = true;
-    next();
-    }, findFromHg, attachOecdSupras);
+///**
+//* @api {get} /find/byparent search for countries by a parent
+//* @apiVersion 0.1.0
+//* @apiName find
+//* @apiGroup geocoder
+//*
+//* @apiDescription search for countries by parent name or id
+//*
+//* @apiParam {String}    name      a name on which to search. Partial matching is supported. (one of name or id)
+//* @apiParam {String}    id        id of parent to search for. Composed of dataset + / + id e.g.: 'oecd/WEUR' (one of name or id)
+//* @apiParam {String}    [before]  latest date the result may be valid: '2015-01-01'
+//* @apiParam {String}    [after]   earliest date the result may be valid: '1870-12-31'
+//*
+//* @apiSuccess   {Object[]}  countries   list of results (Array of Objects)
+//*/
+//api.get('/find/byparent', function(req, res, next) {
+//    req.query.children = true;
+//    next();
+//    }, findFromHg, attachOecdSupras);
 //api.get('/find', findCountries);
 api.get('/ids', getIds);
 
