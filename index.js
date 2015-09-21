@@ -150,7 +150,7 @@ api.get('/', function(req, res) {
 */
 api.get('/find', findFromHg, attachOecdSupras);
 
-///**
+///*
 //* @api {get} /find/byparent search for countries by a parent
 //* @apiVersion 0.1.0
 //* @apiName find
