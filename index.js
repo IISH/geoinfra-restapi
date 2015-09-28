@@ -10,15 +10,7 @@ var findFromHg = require('./lib/find-from-hg.js');
 var oecdSupras = require('./lib/load-oecd-supras.js')();
 //var auth = require('wmapi-auth');
 
-var fooYa = function(req, res, next) {
-    console.log('this handler is  being called: fooYa');
-    console.log(req);
-    next()
-
-}
-
 var api = express();
-
 api.use(queryParser);
 
 
@@ -26,19 +18,6 @@ var transformPost = function(req, res, next) {
     console.log(req);
     next();
 }
-
-function findCountries(req, res) {
-    pg.fetch(req.processedQuery)
-    .then(function(data){
-        res.send(data)
-    })
-    .catch(function(error){
-        console.log('final error somewhere');
-        console.log(error)
-    });
-
-
-};
 
 function getIds(req, res) {
     pg.fetch('select case when source_id = 1 then \'cshapes/\'||id else \'geacron/\'||id end as id, name from geoinfra.entities')
@@ -51,7 +30,6 @@ function getIds(req, res) {
     });
 }
 
-
 //handler for /fetch path. Sends topojson or geojson.
 var getCountries = function(req, res) {
     console.log(req.params);
@@ -61,7 +39,8 @@ var getCountries = function(req, res) {
     .then(function(data){
         res.setHeader('Content-Type', 'application/json');
         //build a GeoJSON feature and return it
-        data[0].row_to_json.totalFeatures = data[0].row_to_json.features.length;
+        console.log(data);
+        //data[0].row_to_json.totalFeatures = data[0].row_to_json.features.length;
         if (req.query.format && req.query.format == 'topojson') {
             res.send(bulkfetch.makeTopo(data[0].row_to_json));
         } else {
@@ -73,25 +52,6 @@ var getCountries = function(req, res) {
         return res.status(500).send('Internal server error. check your server logs for more details. This API is still under development, so it may just be a mismatch from your query parameters to the database records. Try a different time range and/or (set of) countries.');
     process.exit(1);
     });
-}
-
-function testRes(req, res) {
-    console.log(req.query);
-    res.send(req.processedQuery)
-}
-function testHg(req, res) {
-    //for now very basic: just request concepts by name
-    var query = {};
-    query.name = req.query.name
-    var options = {};
-    options.method = 'GET';
-    options.path = '/search?name='+req.query.name+'&geometry=false';
-    hg.fetch(options)
-    .then(function(response) {
-        console.log(response);
-        res.send(response)
-    });
-
 }
 
 //generic one-level array lookup
@@ -123,7 +83,6 @@ function attachOecdSupras(req, res) {
 
 }
 
-api.get('/testres', testRes);
 api.get('/', function(req, res) {
   res.send({
     name: 'Demo',
@@ -150,26 +109,17 @@ api.get('/', function(req, res) {
 */
 api.get('/find', findFromHg, attachOecdSupras);
 
-///*
-//* @api {get} /find/byparent search for countries by a parent
-//* @apiVersion 0.1.0
-//* @apiName find
-//* @apiGroup geocoder
-//*
-//* @apiDescription search for countries by parent name or id
-//*
-//* @apiParam {String}    name      a name on which to search. Partial matching is supported. (one of name or id)
-//* @apiParam {String}    id        id of parent to search for. Composed of dataset + / + id e.g.: 'oecd/WEUR' (one of name or id)
-//* @apiParam {String}    [before]  latest date the result may be valid: '2015-01-01'
-//* @apiParam {String}    [after]   earliest date the result may be valid: '1870-12-31'
-//*
-//* @apiSuccess   {Object[]}  countries   list of results (Array of Objects)
-//*/
-//api.get('/find/byparent', function(req, res, next) {
-//    req.query.children = true;
-//    next();
-//    }, findFromHg, attachOecdSupras);
-//api.get('/find', findCountries);
+/**
+* @api {get} /ids return all historical countries in database with name and id
+* @apiversion 0.1.0
+* @apiName ids
+* @apiGroup misc
+*
+* @apiDescription get a list of all historical country entities in the database, with id and name.
+*
+* @apiSuccess {String}	id	entity id (dataset + number)
+* @apiSuccess {String}	name	entity name
+*/
 api.get('/ids', getIds);
 
 /**
@@ -190,8 +140,6 @@ api.get('/ids', getIds);
 *
 */
 api.get('/fetch', getCountries);
-api.get('/testhg',testHg);
-api.get('/testhg2', findFromHg, attachOecdSupras);
 api.listen(8090, function() {
   console.log('Topojson API listening on port 8090');
 });
