@@ -20,7 +20,7 @@ var transformPost = function(req, res, next) {
 }
 
 function getIds(req, res) {
-    pg.fetch('select case when source_id = 1 then \'cshapes/\'||id else \'geacron/\'||id end as id, name from geoinfra.entities')
+    pg.fetch('select id, name from geoinfra.entities')
     .then(function(data){
         res.send(data)
     })
