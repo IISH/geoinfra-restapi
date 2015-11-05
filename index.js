@@ -11,6 +11,7 @@ var oecdSupras = require('./lib/load-oecd-supras.js')();
 //var auth = require('wmapi-auth');
 
 var api = express();
+api.use('/apidocs', express.static('doc'));
 api.use(queryParser);
 
 
