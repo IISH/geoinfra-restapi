@@ -21,7 +21,7 @@ var transformPost = function(req, res, next) {
 }
 
 function getIds(req, res) {
-    pg.fetch('select id, name from geoinfra.entities')
+    pg.fetch('select id, name, name || \' (\'|| extract(year from start_date) || \' -- \' || extract(year from end_date) as year from geoinfra.entities')
     .then(function(data){
         res.send(data)
     })
