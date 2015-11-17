@@ -12,6 +12,8 @@ var oecdSupras = require('./lib/load-oecd-supras.js')();
 
 var api = express();
 api.use('/apidocs', express.static('doc'));
+express.static.mime.define({'application/javascript': ['topojson']});
+api.use('/static', express.static('static'));
 api.use(queryParser);
 
 

@@ -3,8 +3,8 @@ Geo-Infrastructure Service
 
 Historical geocoder and historical country boundaries.
 
-This repository contains the code for the RESTful API (NodeJS) as well as [installation instructions](README.md/#Installation) and [configurations](config/) for the associated backends (Histograph and PostgreSQL).
 
+This repository contains the code for the RESTful API (NodeJS) as well as [installation instructions](README.md/#Installation) and [configurations](config/) for the associated backends (Histograph and PostgreSQL).
 #About
 
 
@@ -153,4 +153,3 @@ Add to virtualhost:
 Then run:
 
     service apache2 restart
-
