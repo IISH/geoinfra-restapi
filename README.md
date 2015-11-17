@@ -83,10 +83,6 @@ Run these as your normal user
     cp target/*.jar /var/lib/neo4j/plugins/
     service neo4j-service start
 
-
-
-    
-
 ##Histograph Core, API, Config, Import modules
     
     mkdir /opt/histograph && chown $USER:$USER /opt/histograph && cd /opt/histograph
@@ -143,10 +139,12 @@ Redis, Neo4j and Elasticsearch can be run via init.d service scripts. Histograph
     \q
 
 ##Populate database
-    pg_restore -O -d geo dump_of_geoinfra_frozen_ids_2015-10-06.dmp
+    pg_restore -O -d geo backup.dmp
 
 
 ##Apache
+
+    a2enmod headers proxy
 
 Add to virtualhost:
 
