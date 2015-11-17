@@ -1,17 +1,8 @@
-REST HTTP API for geoinfra backend
-==================================
+Geo-Infrastructure Service
+==========================
 
-Proposal: create a separate file for each portion of the API, and then include them from apache vhost config. This way we can version and test all the different parts individually.
+Historical geocoder and historical country boundaries.
 
-probably:
-
-* refmap -- reference map
-* wms   -- visualized datasets
-* raw  -- raw wms/wfs
-* features -- feature query api
+This repository contains the code for the RESTful API (NodeJS) as well as [installation instructions](docs/install.md) and [configurations](config/) for the associated backends (Histograph and PostgreSQL).
 
 
-TODO/unknown:
--------------
-
-* how to block queries that involve certain tables/data sources?
