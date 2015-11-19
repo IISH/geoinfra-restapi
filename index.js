@@ -1,7 +1,13 @@
 var express = require('express');
 var fs = require('fs');
 var nconf = require('nconf');
-nconf.file({file: './config.json'});
+try {
+    nconf.file({file: process.env.GEOINFRA_API_CONFIG});
+} catch (e) {
+   console.log(e);
+   console.log('error reading main configuration file. Is the environment variable GEOINFRA_API_CONFIG set?');
+   process.exit(1)
+}
 var hg = require('./lib/hgapi-bridge')(nconf.get('hg'));
 var pg = require('./lib/pgapi-bridge')(nconf.get('pg'));
 var queryParser = require('./lib/query-parser');
