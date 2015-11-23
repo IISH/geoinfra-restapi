@@ -35,6 +35,13 @@ echo 'export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"' >> /etc/environment
 update-alternatives --set java /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
 source /etc/environment
 
+######################
+#ELASTICSEARCH CONFIG
+######################
+update-rc.d elasticsearch defaults 95 10
+sed -i 's/#ES_HEAP_SIZE=2g/ES_HEAP_SIZE=2g/' /etc/default/elasticsearch
+/etc/init.d/elasticsearch restart
+
 #########################
 #BUILD REDIS FROM SOURCE
 #########################
