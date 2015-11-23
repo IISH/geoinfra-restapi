@@ -5,9 +5,11 @@ set -e
 #installs the Histograph stack on one node (with neo4j, redis, elasticsearch)
 
 source ../configfile;
-######################################
-# ADD PACKAGE REPOSITORIES AND UPDATE
 #####################################
+ ADD PACKAGE REPOSITORIES AND UPDATE
+####################################
+
+apt-get update && apt-get install openjdk-7-jdk -y
 
 #elasticsearch
 wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
@@ -23,13 +25,14 @@ curl -sL https://deb.nodesource.com/setup_0.12 | bash - #this script happens to 
 ###################
 
 #nodejs now comes from custom ppa
-apt-get install git build-essential python-software-properties openjdk-7-jdk neo4j elasticsearch git maven2 nodejs apache2 -y;
+apt-get install git build-essential python-software-properties neo4j elasticsearch git maven2 nodejs apache2 -y;
 npm install -g pm2;
 
 ################
 #CONFIGURE JAVA
 ################
 echo 'export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"' >> /etc/environment
+update-alternatives --set java /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
 source /etc/environment
 
 #########################
@@ -47,14 +50,16 @@ cd ../ && rm -rf redis-3.0.5
 #SET EXTRA ENVIRONMENT VARIABLES FOR NORMAL USER
 #################################################
 su dev <<'EOF'
-echo 'export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"' >> ~/.profile
-echo 'export HISTOGRAPH_CONFIG="$HISTOGRAPH_CONFIG_LOCATION"' >> ~/.profile
-source ~/.profile
+echo 'export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"' >> ~/.bashrc
+echo 'export HISTOGRAPH_CONFIG=/opt/histograph/histograph.run.yml' >> ~/.bashrc
+source ~/.bashrc
 EOF
 
-###################################
-#BUILD NEO4J PLUGIN FOR HISTOGRAPH
-###################################
+####################################################
+#BUILD NEO4J PLUGIN FOR HISTOGRAPH AND DISABLE AUTH (!!!!!)
+####################################################
+echo "org.neo4j.server.thirdparty_jaxrs_classes=org.waag.histograph.plugins=/histograph" >> /etc/neo4j/neo4j-server.properties
+sed -i 's/dbms.security.auth_enabled=false/dbms.security.auth_enabled=true/' /etc/neo4j/neo4j-server.properties
 cd /home/dev
 git clone https://github.com/histograph/neo4j-plugin && cd neo4j-plugin
 mvn package
@@ -63,29 +68,11 @@ cp target/*.jar /var/lib/neo4j/plugins/
 service neo4j-service start
 cd /home/dev && rm -rf neo4j-plugin
 
-######################################
-#INSTALL AND START HISTOGRAPH MODULES
-######################################
+############################
+#INSTALL HISTOGRAPH MODULES
+############################
 mkdir /opt/histograph && chown $USER:$USER /opt/histograph && cd /opt/histograph
 su $USER <<'EOF'
 for f in core api config import; do git clone https://github.com/histograph/$f; (cd $f; npm install);done
 EOF
 
-###############################
-#START HISTOGRAPH CORE AND API
-###############################
-su $USER <<'EOF'
-cd /opt
-for f in histograph/core histograph/api; do pm2 start $f/index.jsi --name $f; done
-pm2 save
-EOF
-#output of pm2 startup ubuntu
-env PATH=$PATH:/usr/bin pm2 startup ubuntu -u $USER --hp /home/$USER
-
-###########################
-#LOAD DATA INTO HISTOGRAPH
-###########################
-su $USER <<'EOF'
-cd /opt/histograph/import
-node index.js cshapes geacron cshapes-geacron oecd
-EOF
