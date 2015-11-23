@@ -6,7 +6,7 @@ set -e
 
 source ../configfile;
 #####################################
- ADD PACKAGE REPOSITORIES AND UPDATE
+# ADD PACKAGE REPOSITORIES AND UPDATE
 ####################################
 
 apt-get update && apt-get install openjdk-7-jdk -y
@@ -59,7 +59,7 @@ EOF
 #BUILD NEO4J PLUGIN FOR HISTOGRAPH AND DISABLE AUTH (!!!!!)
 ####################################################
 echo "org.neo4j.server.thirdparty_jaxrs_classes=org.waag.histograph.plugins=/histograph" >> /etc/neo4j/neo4j-server.properties
-sed -i 's/dbms.security.auth_enabled=false/dbms.security.auth_enabled=true/' /etc/neo4j/neo4j-server.properties
+sed -i 's/dbms.security.auth_enabled=true/dbms.security.auth_enabled=false/' /etc/neo4j/neo4j-server.properties
 cd /home/dev
 git clone https://github.com/histograph/neo4j-plugin && cd neo4j-plugin
 mvn package
