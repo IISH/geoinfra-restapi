@@ -61,6 +61,8 @@ Then, as Root, run:
 
 This installs node, geoinfra-restapi (code contained in this repository) and postgres/postgis configures these and apache.
 
+NOTE this also expects a backup file for populating the Postgres database.
+
 You can then run (as normal user):
 
 	bin/start_geoinfra_api.sh #start geoinfra API
