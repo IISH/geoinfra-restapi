@@ -39,7 +39,7 @@ source /etc/environment
 #ELASTICSEARCH CONFIG
 ######################
 update-rc.d elasticsearch defaults 95 10
-sed -i 's/#ES_HEAP_SIZE=4g/ES_HEAP_SIZE=4g/' /etc/default/elasticsearch
+echo 'ES_HEAP_SIZE=4g/' >> /etc/default/elasticsearch
 cat <<EOF >> etc/elasticsearch/elasticsearch.yml
 index.analysis.analyzer.lowercase:
   filter: lowercase

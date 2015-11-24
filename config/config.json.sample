@@ -1,0 +1,16 @@
+{
+    "pg":{
+        "d": "DATABASE",
+        "h": "POSTGRES_HOSTNAME",
+        "p": "POSTGRES_USER_PASSWD",
+        "u": "POSTGRES_USER"
+    },
+    "hg":{
+        "baseUrl":"http://HISTOGRAPH_MACHINE_IP:3001"
+    },
+    "qb":{
+        "fromTable": {
+            "entities":"geoinfra.entities"
+        }
+    }
+}
