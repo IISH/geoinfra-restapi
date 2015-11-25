@@ -1,4 +1,24 @@
 ---
+  elasticsearch::manage_repo: true
+  elasticsearch::package_pin: true
+  elasticsearch::repo_version: "1.7"
+  elasticsearch::version: "1.7.2"
+  elasticsearch::init_defaults:
+    ES_HEAP_SIZE: "4g"
+  elasticsearch::instance:
+    es-01:
+      config:
+        index.analysis.analyzer.lowercase:
+          filter: lowercase
+          tokenizer: keyword
+  java::package: "openjdk-7-jdk"
+  neo4j::version: "2.2.6"
+  neo4j::edition: "community"
+  nodejs::repo_url_suffix: "node_0.12"
+  nodejs::npm:
+    pm2:
+      install_options: ["-g"]
+      target: "/opt"
   postgresql::globals::encoding: "UTF-8"
   postgresql::globals::locale: "en_US.UTF-8"
   postgresql::globals::manage_package_repo: true
@@ -13,6 +33,6 @@
       type: "host"
       database: "geoinfra"
       user: "geoinfra"
-      address: "%{::ipaddress}/32"
+      address: "172.28.0.0/16"
       auth_method: "md5"
   redis::manage_repo: true

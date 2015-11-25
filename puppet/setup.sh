@@ -45,7 +45,7 @@ function main {
     gpg --import /tmp/pubkey.gpg
     gpg -a --export 4BD6EC30 | apt-key add -
     apt-get -y update
-    apt-get install facter puppet-common=3.8.3-1puppetlabs1
+    apt-get -y install facter puppet-common=3.8.3-1puppetlabs1
     apt-mark hold puppet-common
 
 
@@ -73,6 +73,9 @@ ssl_client_verify_header = SSL_CLIENT_VERIFY" > /etc/puppet/puppet.conf
 
     # install our dependencies
     puppet module install arioch-redis
+    puppet module install puppetlabs-java
+    puppet module install amosjwood-neo4j
+    puppet module install puppet-nodejs
     puppet module install puppetlabs-postgresql
 
     touch $FIRSTRUN
