@@ -1,9 +1,6 @@
 ---
-  geoinfra::database: "geoinfra"
-  geoinfra::host: "%{::ipaddress}"
-  geoinfra::password: "geoinfra"
-  geoinfra::username: "geoinfra"
-  geoinfra::histograph_endpoint: "%{::ipaddress}:3001"
+  postgresql::globals::encoding: "UTF-8"
+  postgresql::globals::locale: "en_US.UTF-8"
   postgresql::globals::manage_package_repo: true
   postgresql::globals::version: "9.4"
   postgresql::server::db:

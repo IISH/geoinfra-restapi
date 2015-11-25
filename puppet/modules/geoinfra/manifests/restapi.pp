@@ -1,20 +1,13 @@
 class geoinfra::restapi (
   $home = $geoinfra::params::restapi_home,
   $user = $geoinfra::params::restapi_user,
+  $database_name = $geoinfra::params::restapi_database_name,
+  $database_host = $geoinfra::params::restapi_database_host,
+  $database_password = $geoinfra::params::restapi_database_password,
+  $database_username = $geoinfra::params::restapi_database_username,
+  $histograph_endpoint = $geoinfra::params::restapi_histograph_endpoint,
 ) inherits geoinfra::params {
 
-  package {
-    'python-software-properties':
-      ensure => present,
-  }
-
-  class { 'postgresql::globals':
-    encoding => 'UTF-8',
-    locale   => 'en_US.UTF-8',
-  }->class { 'postgresql::server':
-  }
-
-  include redis
 
   group {
     $user:
@@ -30,7 +23,10 @@ class geoinfra::restapi (
     $home :
       ensure => directory,
       owner  => $user,
-      group  => $user,
+      group  => $user ;
+    "${home}/config.json":
+      ensure  => file,
+      content => template('geoinfra/config.json') ;
   }
 
 }
