@@ -1,8 +1,1 @@
-package {
-  'python-software-properties':
-    ensure => present,
-}
-
-
-include postgresql
-include redis
+include geoinfra::restapi

@@ -1,14 +1,21 @@
 ---
+  geoinfra::database: "geoinfra"
+  geoinfra::host: "%{::ipaddress}"
+  geoinfra::password: "geoinfra"
+  geoinfra::username: "geoinfra"
+  geoinfra::histograph_endpoint: "%{::ipaddress}:3001"
+  postgresql::globals::manage_package_repo: true
+  postgresql::globals::version: "9.4"
   postgresql::server::db:
-    geo:
-      user: "geo"
+    geoinfra:
+      user: "geoinfra"
       password: "md5ac0870ed1147c3a0ba959602774869d6"
   postgresql::server::pg_hba_rule:
     Access to delivery from %{::fqdn}:
       description: "Open up postgresql for access from %{::ipaddress}"
       type: "host"
-      database: "geo"
-      user: "geo"
+      database: "geoinfra"
+      user: "geoinfra"
       address: "%{::ipaddress}/32"
       auth_method: "md5"
   redis::manage_repo: true

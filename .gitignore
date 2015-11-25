@@ -5,7 +5,12 @@ config.json
 apidoc/*
 foo/*
 .idea
-puppet.conf
-modules
-environments
-templates
+puppet/puppet.conf
+puppet/modules/apt
+puppet/modules/concat
+puppet/modules/epel
+puppet/modules/postgresql
+puppet/modules/redis
+puppet/modules/stdlib
+puppet/environments
+puppet/templates
