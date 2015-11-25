@@ -8,7 +8,12 @@ foo/*
 puppet/puppet.conf
 puppet/modules/apt
 puppet/modules/concat
+puppet/modules/elasticsearch
 puppet/modules/epel
+puppet/modules/gpg_key
+puppet/modules/java
+puppet/modules/neo4j
+puppet/modules/nodejs
 puppet/modules/postgresql
 puppet/modules/redis
 puppet/modules/stdlib
