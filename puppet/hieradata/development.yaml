@@ -1,0 +1,14 @@
+---
+  postgresql::server::db:
+    geo:
+      user: "geo"
+      password: "md5ac0870ed1147c3a0ba959602774869d6"
+  postgresql::server::pg_hba_rule:
+    Access to delivery from %{::fqdn}:
+      description: "Open up postgresql for access from %{::ipaddress}"
+      type: "host"
+      database: "geo"
+      user: "geo"
+      address: "%{::ipaddress}/32"
+      auth_method: "md5"
+  redis::manage_repo: true

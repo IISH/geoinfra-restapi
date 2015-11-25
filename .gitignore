@@ -5,3 +5,7 @@ config.json
 apidoc/*
 foo/*
 .idea
+puppet.conf
+modules
+environments
+templates

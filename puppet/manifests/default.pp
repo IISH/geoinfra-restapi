@@ -4,7 +4,5 @@ package {
 }
 
 
-class { 'redis':
-  manage_repo => true,
-}
-
+include postgresql
+include redis

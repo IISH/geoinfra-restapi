@@ -32,7 +32,7 @@ function main {
     # We will only update and install in the first provisioning step.
     # If ever you need to update again
     FIRSTRUN=$WD/firstrun
-    if [ ! -f $FIRSTRUN ] ; then
+    if [ -f $FIRSTRUN ] ; then
         echo "Already installed. To reinstall or update, remove this file ${FIRSTRUN}"
         exit 0
     fi
@@ -44,7 +44,7 @@ function main {
     wget -O /tmp/pubkey.gpg http://apt.puppetlabs.com/pubkey.gpg
     gpg --import /tmp/pubkey.gpg
     gpg -a --export 4BD6EC30 | apt-key add -
-    apt-get update
+    apt-get -y update
     apt-get install facter puppet-common=3.8.3-1puppetlabs1
     apt-mark hold puppet-common
 
@@ -77,6 +77,9 @@ ssl_client_verify_header = SSL_CLIENT_VERIFY" > /etc/puppet/puppet.conf
 
     touch $FIRSTRUN
 
+    echo "I think we are done for today."
+
+    exit 0
 }
 
 
