@@ -44,9 +44,31 @@ node 'hg.home' {
       ensure => directory,
       owner  => $user,
       group  => $user ;
-    '/opt/neo4j/neo4j-community-2.2.6/plugins/histograph-plugin-0.5.0-SNAPSHOT.jar':
+    "${neo4j::install_prefix}/${package_name}/plugins/histograph-plugin-0.5.0-SNAPSHOT.jar":
       ensure  => file,
       notify  => Service['neo4j'],
       source  => 'puppet:///modules/geoinfra/histograph-plugin-0.5.0-SNAPSHOT.jar';
+     '/var/lib/neo4j':
+       ensure => link,
+       target => "${neo4j::install_prefix}/${package_name}";
+  }
+
+  # Declared in neo4j.... append properties
+  $properties_file = "${neo4j::install_prefix}/${neo4j::package_name}/conf/neo4j-server.properties"
+  concat {
+    'neo4j-server.properties':
+      path => $properties_file,
+  }
+
+  concat::fragment{ 'neo4j properties declare plugin':
+    target  => $properties_file,
+    content => "org.neo4j.server.thirdparty_jaxrs_classes=org.waag.histograph.plugins=/histograph",
+    order   => 98,
+  }
+
+  concat::fragment{ 'neo4j properties disable authentication':
+    target  => $properties_file,
+    content => 'dbms.security.auth_enabled=false',
+    order   => 99,
   }
 }
