@@ -37,6 +37,8 @@ function main {
         exit 0
     fi
 
+    puppet_conf=/etc/puppet/puppet.conf
+
 
     echo "deb http://apt.puppetlabs.com/ precise main
     deb-src http://apt.puppetlabs.com/ precise main">/etc/apt/sources.list.d/puppet.list
@@ -45,6 +47,9 @@ function main {
     gpg --import /tmp/pubkey.gpg
     gpg -a --export 4BD6EC30 | apt-key add -
     apt-get -y update
+    if [ -f $puppet_conf ] ; then
+        rm $puppet_conf
+    fi
     apt-get -y install facter puppet-common=3.8.3-1puppetlabs1
     apt-mark hold puppet-common
 
@@ -65,7 +70,7 @@ report=false
 # These are needed when the puppetmaster is run by passenger
 # and can safely be removed if webrick is used.
 ssl_client_header = SSL_CLIENT_S_DN
-ssl_client_verify_header = SSL_CLIENT_VERIFY" > /etc/puppet/puppet.conf
+ssl_client_verify_header = SSL_CLIENT_VERIFY" > $puppet_conf
 
 
     puppet agent --enable
@@ -75,6 +80,7 @@ ssl_client_verify_header = SSL_CLIENT_VERIFY" > /etc/puppet/puppet.conf
     puppet module install arioch-redis
     puppet module install puppetlabs-java
     puppet module install amosjwood-neo4j
+    puppet module install maestrodev-wget
     puppet module install puppet-nodejs
     puppet module install puppetlabs-postgresql
 

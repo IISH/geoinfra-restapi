@@ -13,6 +13,7 @@ Vagrant.configure(2) do |config|
     end
     host.vm.provision 'shell', path: 'puppet/setup.sh'
     host.vm.synced_folder 'puppet', '/etc/puppet'
+
   end
 
   config.vm.define 'ra', autostart: false do |host|
@@ -26,5 +27,9 @@ Vagrant.configure(2) do |config|
     host.vm.provision 'shell', path: 'puppet/setup.sh'
     host.vm.synced_folder 'puppet', '/etc/puppet'
   end
+
+  # neo4j
+  config.vm.network "forwarded_port", guest: 7474, host: 7474
+
 
 end

@@ -14,7 +14,7 @@
   java::package: "openjdk-7-jdk"
   neo4j::version: "2.2.6"
   neo4j::edition: "community"
-  neo4j::install_prefix: "/var/lib"
+  neo4j::install_prefix: "/opt/neo4j"
   nodejs::repo_url_suffix: "node_0.12"
   nodejs::npm:
     pm2:

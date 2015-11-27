@@ -17,5 +17,6 @@ puppet/modules/nodejs
 puppet/modules/postgresql
 puppet/modules/redis
 puppet/modules/stdlib
+puppet/modules/wget
 puppet/environments
 puppet/templates
