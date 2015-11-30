@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "restapi",
   "version": "0.0.0",
   "description": "geocoding api for IISG geoinfra",
   "main": "index.js",

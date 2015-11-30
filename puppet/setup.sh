@@ -28,6 +28,9 @@ function main {
     fi
     cd $WD
 
+    # Clean up
+    apt-get -y remove nodejs
+
 
     # We will only update and install in the first provisioning step.
     # If ever you need to update again
@@ -51,7 +54,6 @@ function main {
         rm $puppet_conf
     fi
     apt-get -y install facter puppet-common=3.8.3-1puppetlabs1
-    apt-mark hold puppet-common
 
 
     echo "[main]

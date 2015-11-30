@@ -1,8 +1,11 @@
 class geoinfra (
+  $instance_conf = $geoinfra::params::instance_conf,
   $histograph_endpoint = $geoinfra::params::histograph_endpoint,
   $home_dir = $geoinfra::params::home_dir,
   $user = $geoinfra::params::user,
 ) inherits geoinfra::params {
+
+  include geoinfra::environment
 
   group {
     $user:
@@ -12,23 +15,26 @@ class geoinfra (
     $user:
       ensure => present,
       groups =>  $user,
+      managehome => true,
   }
 
   file {
-    $home :
+    $home_dir :
       ensure => directory,
       owner  => $user,
       group  => $user ;
-    "${home}/config.json":
+    "${home_dir}/config.json":
       ensure  => file,
-      content => template('geoinfra/config.json') ;
+      group   => $user,
+      owner   => $user,
+      content => template('geoinfra/config.json.erb') ;
   }
 
 # nodejs
   if defined('nodejs') {
     class {
       'geoinfra::nodejs':
-        require => File["${home_dir}/config.yml"],
+        require => File["${home_dir}/config.json"],
     }
   }
 

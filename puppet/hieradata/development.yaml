@@ -1,8 +1,21 @@
 ---
   classes:
-    - environment
     - geoinfra
     - nodejs
+  geoinfra::environment::variables:
+    GEOINFRA_HOME: "/opt/geoinfra"
+    "export GEOINFRA_API_CONFIG": "/opt/geoinfra/config.yml"
+  geoinfra::instance_config:
+    pg:
+      d: "geoinfra"
+      h: "localhost"
+      p: "geoinfra"
+      u: "geoinfra"
+    hg:
+      baseUrl: "http://localhost:3001"
+    qb:
+      fromTable:
+        entities: "geoinfra.entities"
   postgresql::globals::encoding: "UTF-8"
   postgresql::globals::locale: "en_US.UTF-8"
   postgresql::globals::manage_package_repo: true
@@ -19,10 +32,9 @@
       user: "geoinfra"
       address: "172.28.0.0/16"
       auth_method: "md5"
-  postgresql::server::postgis
   nodejs::repo_url_suffix: "node_0.12"
   nodejs::npm:
-    api:
+    restapi:
       home_dir: "/opt/geoinfra"
       source: "https://github.com/IISH/geoinfra-restapi.git"
       target: "/opt/geoinfra"
