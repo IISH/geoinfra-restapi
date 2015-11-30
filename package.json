@@ -3,10 +3,6 @@
     "version": "0.1.0",
     "description": "geocoding api for IISG geoinfra",
     "main": "index.js",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/IISH/geoinfra-restapi.git"
-    },
     "scripts": {
         "test": "node test/test.js",
         "builddoc": "apidoc -f .js -e node_modules/",
