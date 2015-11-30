@@ -77,14 +77,12 @@ ssl_client_verify_header = SSL_CLIENT_VERIFY" > $puppet_conf
 
 
     # install our dependencies
-    puppet module install arioch-redis
-    puppet module install puppetlabs-java
-    puppet module install amosjwood-neo4j
-    puppet module install maestrodev-wget
     puppet module install puppet-nodejs
     puppet module install puppetlabs-postgresql
 
     touch $FIRSTRUN
+
+    puppet /etc/puppet/manifests/sites.pp
 
     echo "I think we are done for today."
 

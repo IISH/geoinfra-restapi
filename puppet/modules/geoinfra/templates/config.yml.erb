@@ -1,6 +1,6 @@
 <%-
 
-# Taken from elastic search module.
+# Taken from the elasticsearch-elasticsearch puppet module.
 
   # Function to make a structured and sorted yaml representation out of a hash
   def recursive_hash_to_yml_string(hash, depth=0)
@@ -77,7 +77,7 @@
 
     @yml_string += "---\n"
 
-    ## Transform shorted keys into full write up
+    ## Transform shorted keys into full wrFite up
     transformed_config = transform(@instance_conf)
 
     # Merge it back into a hash
