@@ -36,7 +36,7 @@
   nodejs::npm:
     restapi:
       home_dir: "/opt/geoinfra"
-      source: "https://github.com/IISH/geoinfra-restapi.git"
+      source: "https://github.com/IISH/restapi.git"
       target: "/opt/geoinfra"
       user: "geoinfra"
     pm2:

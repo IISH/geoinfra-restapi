@@ -1,36 +1,40 @@
 {
-  "name": "geoinfra-restapi",
-  "version": "0.1.0",
-  "description": "geocoding api for IISG geoinfra",
-  "main": "index.js",
-  "scripts": {
-    "test": "node test/test.js",
-    "builddoc": "apidoc -f .js -e node_modules/",
-    "dev": "nodemon --exec \"npm test\" "
-  },
-  "author": "Hans Fast",
-  "license": "GPLv2",
-  "dependencies": {
-    "express": "~4.13.3",
-    "pouchdb": "~4.0.0",
-    "rsvp": "~3.0.21",
-    "request": "~2.60.0",
-    "squel": "~4.0.0",
-    "pg-promise": "~1.8.5",
-    "nconf": "~0.7.2",
-    "topojson": "~1.6.19",
-    "highland": "~2.5.1"
-  },
-  "devDependencies": {
-    "nodemon": "~1.4.1",
-    "prettyjson": "~1.1.3",
-    "tape": "~4.1.0"
-  },
-  "apidoc": {
-    "name": "geoinfra restapi",
+    "name": "geoinfra-restapi",
     "version": "0.1.0",
-    "description": "find and fetch places in time",
-    "title": "historical geocoder",
-    "url": "http://localhost:8090"
-  }
+    "description": "geocoding api for IISG geoinfra",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/IISH/geoinfra-restapi.git"
+    },
+    "scripts": {
+        "test": "node test/test.js",
+        "builddoc": "apidoc -f .js -e node_modules/",
+        "dev": "nodemon --exec \"npm test\" "
+    },
+    "author": "Hans Fast",
+    "license": "GPLv2",
+    "dependencies": {
+        "express": "~4.13.3",
+        "pouchdb": "~4.0.0",
+        "rsvp": "~3.0.21",
+        "request": "~2.60.0",
+        "squel": "~4.0.0",
+        "pg-promise": "~1.8.5",
+        "nconf": "~0.7.2",
+        "topojson": "~1.6.19",
+        "highland": "~2.5.1"
+    },
+    "devDependencies": {
+        "nodemon": "~1.4.1",
+        "prettyjson": "~1.1.3",
+        "tape": "~4.1.0"
+    },
+    "apidoc": {
+        "name": "geoinfra restapi",
+        "version": "0.1.0",
+        "description": "find and fetch places in time",
+        "title": "historical geocoder",
+        "url": "http://localhost:8090"
+    }
 }
