@@ -31,18 +31,18 @@ class geoinfra (
   }
 
 # nodejs
-  if defined('nodejs') {
-    class {
-      'geoinfra::nodejs':
-        require => File["${home_dir}/config.json"],
-    }
-  }
+ # if defined('nodejs') {
+ #   class {
+ #     'geoinfra::nodejs':
+ #       require => File["${home_dir}/config.json"],
+ #   }
+ # }
 
 #postgresql
-  if defined('postgresql::globals') {
-    class {
-      'geoinfra::postgresql':
-    }
-  }
+#if defined('postgresql::globals') {
+#  class {
+#    'geoinfra::postgresql':
+#  }
+#}
 
 }

@@ -1,29 +1,35 @@
 <%-
 
 # Taken from the elasticsearch-elasticsearch puppet module.
-# Then adapted to cast to json.
 
-  # Function to make a structured and sorted json representation out of a hash
+  # Function to make a structured and sorted yaml representation out of a hash
   def recursive_hash_to_yml_string(hash, depth=0)
-    spacer = " "
+    spacer = ""
     depth.times { spacer += "  "}
-    hash.keys.sort.each do |sorted_key|
-      @yml_string += spacer + sorted_key + ": {"
+    hash.keys.sort.each_with_index do |sorted_key,index|
+      @yml_string += spacer + "\"" + sorted_key + "\":\n"
       if hash[sorted_key].is_a?(Array)
+         @yml_string += "["
          keyspacer = ""
          sorted_key.length.times { keyspacer += " " }
-         @yml_string += "["
+         @yml_string += "\n"
          hash[sorted_key].each do |item|
-           @yml_string += spacer + keyspacer + "\"" + item + "\""  # If not last, add a comma
+           @yml_string += spacer + keyspacer + "\"" + item +"\"\n"
+           if index != hash.keys.size - 1
+             @yml_string += ","
+           end
          end
          @yml_string += "]"
       elsif hash[sorted_key].is_a?(Hash)
-        @yml_string += "\n"
+        @yml_string += "{"
         recursive_hash_to_yml_string(hash[sorted_key], depth+1)
+        @yml_string += "}"
       else
-        @yml_string += "#{hash[sorted_key].to_s}\n"
+        @yml_string += "\"#{hash[sorted_key].to_s}\"\n"
       end
-      @yml_string += spacer + sorted_key + "}"
+      if index != hash.keys.size - 1
+        @yml_string += ","
+      end
     end
   end
 
@@ -74,11 +80,9 @@
   end
 
   # initial string
-  @yml_string = "### MANAGED BY PUPPET ###\n"
+  @yml_string = "// ### MANAGED BY PUPPET ###\n{\n"
 
   if !@instance_conf.empty?
-
-    @yml_string = " "
 
     ## Transform shorted keys into full wrFite up
     transformed_config = transform(@instance_conf)
@@ -93,6 +97,8 @@
     recursive_hash_to_yml_string(tmphash)
 
   end
+
+  @yml_string += "}"
 
 -%>
 <%= @yml_string -%>
