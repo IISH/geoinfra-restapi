@@ -84,7 +84,7 @@ ssl_client_verify_header = SSL_CLIENT_VERIFY" > $puppet_conf
 
     touch $FIRSTRUN
 
-    puppet /etc/puppet/manifests/sites.pp
+    puppet apply /etc/puppet/manifests/sites.pp
 
     echo "I think we are done for today."
 

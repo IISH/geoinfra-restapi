@@ -27,7 +27,7 @@ class geoinfra (
       ensure  => file,
       group   => $user,
       owner   => $user,
-      content => template('geoinfra/config.json.erb') ;
+      content => template('geoinfra/instance_conf.json.erb') ;
   }
 
 # nodejs

@@ -4,8 +4,8 @@
     - nodejs
   geoinfra::environment::variables:
     GEOINFRA_HOME: "/opt/geoinfra"
-    "export GEOINFRA_API_CONFIG": "/opt/geoinfra/config.yml"
-  geoinfra::instance_config:
+    "export GEOINFRA_API_CONFIG": "/opt/geoinfra/config.json"
+  geoinfra::instance_conf:
     pg:
       d: "geoinfra"
       h: "localhost"
@@ -36,7 +36,7 @@
   nodejs::npm:
     restapi:
       home_dir: "/opt/geoinfra"
-      source: "https://github.com/IISH/restapi.git"
+      source: "https://github.com/IISH/geoinfra-restapi.git"
       target: "/opt/geoinfra"
       user: "geoinfra"
     pm2:
