@@ -39,7 +39,12 @@ source /etc/environment
 #ELASTICSEARCH CONFIG
 ######################
 update-rc.d elasticsearch defaults 95 10
-sed -i 's/#ES_HEAP_SIZE=2g/ES_HEAP_SIZE=2g/' /etc/default/elasticsearch
+echo 'ES_HEAP_SIZE=4g/' >> /etc/default/elasticsearch
+cat <<EOF >> etc/elasticsearch/elasticsearch.yml
+index.analysis.analyzer.lowercase:
+  filter: lowercase
+  tokenizer: keyword
+EOF
 /etc/init.d/elasticsearch restart
 
 #########################
@@ -73,6 +78,7 @@ mvn package
 service neo4j-service stop
 cp target/*.jar /var/lib/neo4j/plugins/
 service neo4j-service start
+neo4j-shell -c "CREATE CONSTRAINT ON (n:_) ASSERT n.id IS UNIQUE;"
 cd /home/dev && rm -rf neo4j-plugin
 
 ############################

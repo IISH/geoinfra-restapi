@@ -10,7 +10,7 @@ source ../configfile;
 # ADD PACKAGE REPOSITORIES AND UPDATE
 #####################################
 
-postgresql 9.4
+#postgresql 9.4
 echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" >> /etc/apt/sources.list
 wget --quiet -O - https://www.postgresql.org/~/ACCC4CF8.asc | sudo apt-key add -
 #node 0.12, npm
@@ -42,24 +42,15 @@ EOF
 ########################
 sudo -u dev pg_restore -O -d geo $DATA_DIR/$DB_BACKUP_FILE;
 
-#####################################
-# INSTALL AND START THE GEOINFRA API
-#####################################
+###########################
+# INSTALL THE GEOINFRA API
+###########################
 mkdir /opt/geoinfra && chown -R $USER:$USER /opt/geoinfra && cd /opt/geoinfra;
 su $USER <<'EOF'
 git clone https://github.com/IISH/geoinfra-restapi && cd geoinfra-restapi;
 npm install;
 echo "export GEOINFRA_API_CONFIG=$GEOINFRA_API_CONFIG_LOCATION" >> ~/.profile;
-source ~/.profile;
-pm2 start index.js --name geoinfra_api;
-pm2 save;
 EOF
-
-######################
-# MAKE API PERSISTENT
-######################
-#output of `pm2 startup ubuntu`
-sudo su -c "env PATH=$PATH:/usr/bin pm2 startup ubuntu -u $USER --hp /home/$USER"
 
 ###################
 # CONFIGURE APACHE
