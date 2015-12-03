@@ -3,6 +3,7 @@ node_modules
 node_modules/*
 config.json
 apidoc/*
+doc/*
 foo/*
 .idea
 puppet/puppet.conf
@@ -20,3 +21,5 @@ puppet/modules/stdlib
 puppet/modules/wget
 puppet/environments
 puppet/templates
+
+static/all.topojson
