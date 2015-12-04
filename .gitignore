@@ -20,3 +20,5 @@ puppet/modules/stdlib
 puppet/modules/wget
 puppet/environments
 puppet/templates
+
+static/all.topojson
