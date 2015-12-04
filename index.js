@@ -8,7 +8,6 @@ try {
    console.log('error reading main configuration file. Is the environment variable GEOINFRA_API_CONFIG set?');
    process.exit(1)
 }
-var hg = require('./lib/hgapi-bridge')(nconf.get('hg'));
 var pg = require('./lib/pgapi-bridge')(nconf.get('pg'));
 var queryParser = require('./lib/query-parser');
 var bulkfetch = require('./lib/topojson.js');
