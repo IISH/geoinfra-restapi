@@ -3,6 +3,7 @@ node_modules
 node_modules/*
 config.json
 apidoc/*
+doc/*
 foo/*
 .idea
 puppet/puppet.conf
