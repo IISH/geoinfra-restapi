@@ -8,7 +8,6 @@ try {
    console.log('error reading main configuration file. Is the environment variable GEOINFRA_API_CONFIG set?');
    process.exit(1)
 }
-var hg = require('./lib/hgapi-bridge')(nconf.get('hg'));
 var pg = require('./lib/pgapi-bridge')(nconf.get('pg'));
 var queryParser = require('./lib/query-parser');
 var bulkfetch = require('./lib/topojson.js');
@@ -19,7 +18,7 @@ var oecdSupras = require('./lib/load-oecd-supras.js')();
 var api = express();
 api.use('/apidocs', express.static('doc'));
 express.static.mime.define({'application/javascript': ['topojson']});
-api.use('/static', express.static('static'));
+api.use('/static', express.static(nconf.get('staticDir')));
 api.use(queryParser);
 
 
@@ -149,7 +148,8 @@ api.get('/ids', getIds);
 *
 */
 api.get('/fetch', getCountries);
-api.listen(8090, function() {
-  console.log('Topojson API listening on port 8090');
+var apiPort = nconf.get('apiPort');
+api.listen(apiPort, function() {
+  console.log('Topojson API listening on port '+apiPort);
 });
 

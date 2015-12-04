@@ -1,4 +1,6 @@
 {
+    "apiPort": 8090,
+    "staticDir":"static",
     "pg":{
         "d": "DATABASE",
         "h": "POSTGRES_HOSTNAME",

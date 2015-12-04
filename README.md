@@ -55,6 +55,8 @@ And to save the pm2 processes for restart on reboot, run as root:
 ##Geoinfra API and Postgres
 You will need `~/configfile` referred to by the install script. You also need the JSON config file for the geoinfra API. An example of this file can be found [here](config/config.json.sample).
 
+the api config file `config.json(.sample)` specifies among other things the location of a static dir from which to serve some static topojson files.
+
 Then, as Root, run:
 
 	bin/install_test_pgpr.sh
