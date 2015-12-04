@@ -12,7 +12,6 @@
     "license": "GPLv2",
     "dependencies": {
         "express": "~4.13.3",
-        "pouchdb": "~4.0.0",
         "rsvp": "~3.0.21",
         "request": "~2.60.0",
         "squel": "~4.0.0",
