@@ -14,7 +14,7 @@ var queryParser = require('./lib/query-parser');
 var bulkfetch = require('./lib/topojson.js');
 var findFromHg = require('./lib/find-from-hg.js');
 var oecdSupras = require('./lib/load-oecd-supras.js')();
-//var auth = require('wmapi-auth');
+//var auth = requi8090re('wmapi-auth');
 
 var api = express();
 api.use('/apidocs', express.static('doc'));
