@@ -148,7 +148,8 @@ api.get('/ids', getIds);
 *
 */
 api.get('/fetch', getCountries);
-api.listen(8090, function() {
-  console.log('Topojson API listening on port 8090');
+var apiPort = nconf.get('apiPort');
+api.listen(apiPort, function() {
+  console.log('Topojson API listening on port '+apiPort);
 });
 
