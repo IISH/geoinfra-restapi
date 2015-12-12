@@ -22,3 +22,4 @@ puppet/modules/wget
 puppet/environments
 puppet/templates
 static/*
+resources
